@@ -61,7 +61,7 @@ class GifsectController < ApplicationController
         background: bg,
         width: first.page.width,
         height: first.page.height,
-        anim_start: 0,
+        animStart: 0,
         frames: [],
         delay: first.delay.nil?? (1000.0/ticks).to_i: first.delay.to_f / (ticks * 1000).to_i
     }

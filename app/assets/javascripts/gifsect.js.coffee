@@ -9,6 +9,7 @@ $ ->
     frames: [],
     loaded: 0,
     current: 0,
+    loopStart: 0,
     reconstructed: [],
     frameCount: 0,
     animating: false,
@@ -17,7 +18,7 @@ $ ->
 
     selectFrame: (fid=@current,resize=false)->
       fid = 0 if fid < 0
-      fid = fid % @frameCount if fid >= @frameCount
+      fid = gif.loopStart if fid >= @frameCount
       change = @current != fid || @context.canvas.width != @lastWidth || @context.canvas.height != @lastHeight
       return unless change
       @current = fid
@@ -84,6 +85,7 @@ $ ->
         gif.height = data.height
         gif.current = Number((window.location.hash || '#0').substring(1)) || 0
         gif.frames = data.frames
+        gif.animstart = data.animStart
         gif.frameCount = gif.frames.length
 
         sel = $('#frame-selector')
