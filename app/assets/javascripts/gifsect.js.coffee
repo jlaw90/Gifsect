@@ -132,6 +132,7 @@ $ ->
               $(window).resize()
               gif.selectFrame()
               $('#controls').mouseleave()
+              gif.animateToggle()
         null
       )
     )
