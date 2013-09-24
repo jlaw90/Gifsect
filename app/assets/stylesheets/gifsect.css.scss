@@ -1,0 +1,105 @@
+// Place all the styles related to the gifsect controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+$frame-height: 8em;
+
+html {
+  height: 100%;
+}
+
+body {
+  min-height: 100%;
+}
+
+html, body {
+  padding: 0;
+  margin: 0;
+  overflow-y: hidden;
+  -ms-overflow-y: hidden;
+}
+
+#loading-overlay {
+  position: fixed;
+  bottom: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  text-align: center;
+
+  #loading-content {
+    font-family: "Palatino Linotype", "Book Antiqua", Palatino, serif;
+    font-size: 5em;
+    margin-top: -1em;
+    position: fixed;
+    top: 50%;
+    bottom: 50%;
+    width: 100%;
+  }
+}
+
+#controls {
+  #panel, #frame-selector {
+    position: fixed;
+    bottom: 0;
+    left: 2%;
+    right: 2%;
+    text-align: center;
+    background-color: rgba(0, 0, 0, 0.5);
+  }
+
+  #panel {
+    position: absolute;
+    bottom: 0;
+    display: inline;
+  }
+
+  #frame-selector {
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    bottom: 0px;
+    position: absolute;
+    padding: 0.25em;
+    padding-bottom: 0;
+    white-space: nowrap;
+    overflow: auto;
+    overflow-y: hidden;
+    -ms-overflow-y: hidden;
+    overflow-x: scroll;
+
+    a.frame {
+      background-color: rgba(255, 255, 255, 0.1);
+      background-image: image-url('loader.gif');
+      background-repeat: no-repeat;
+      background-attachment: center;
+      background-position: center;
+      background-size: contain;
+      display: inline-block;
+      margin-right: 0.25em;
+      border: 1px solid #eeeeee;
+      height: $frame-height;
+      width: $frame-height;
+      color: #ffffff;
+      text-decoration: none;
+
+      &:focus, &:hover {
+        outline: none;
+        background-color: rgba(255, 255, 255, 0.2);
+      }
+
+      &:last-child {
+        margin-right: 0;
+      }
+
+      &.selected {
+        background-color: rgba(255, 255, 255, 0.7);
+        border-color: #ffffff;
+      }
+    }
+  }
+}
+
+#preview-area {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+}

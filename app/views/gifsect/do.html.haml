@@ -1,0 +1,22 @@
+%canvas#preview-area
+
+#controls
+  #frame-selector
+  #panel
+    %button{ onclick: 'gif.previous()', id: 'prev', disabled: 'disabled', title: 'Previous' }=fa_icon 'step-backward'
+    %button{ onclick: 'gif.animateToggle()', id: 'toggle', disabled: 'disabled', title: 'Play' }=fa_icon 'play'
+    %button{ onclick: 'gif.next()', id: 'next', disabled: 'disabled', title: 'Next' }=fa_icon 'step-forward'
+
+#loading-overlay
+  #loading-content
+    %span#loading-text<>
+      Loading image metadata
+    %span#loading-ellipsis<>
+      ='...'
+
+#adbar
+
+:javascript
+  $(function() {
+    getMetadata();
+  });
