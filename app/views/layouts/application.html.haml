@@ -5,6 +5,19 @@
     =stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true
     = javascript_include_tag 'application', 'data-turbolinks-track' => true
     = csrf_meta_tags
+    / AddThis Smart Layers BEGIN
+    / Go to http://www.addthis.com/get/smart-layers to customize
+    %script{type: 'text/javascript', src: "//s7.addthis.com/js/300/addthis_widget.js#pubid=#{ADDTHIS_PUBID}"}
+    :javascript
+      addthis.layers({
+        'theme' : 'transparent',
+        'share' : {
+          'position' : 'right',
+          'numPreferredServices' : 5
+        },
+        'recommended' : {}
+      });
+    / AddThis Smart Layers END
 
   %body
     =yield
