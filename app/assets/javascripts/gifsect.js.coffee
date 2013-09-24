@@ -14,7 +14,8 @@ $ ->
     frameCount: 0,
     animating: false,
     lastWidth: 0,
-    lastHeight: 0
+    lastHeight: 0,
+    speed: 1
 
     selectFrame: (fid=@current,resize=false)->
       fid = 0 if fid < 0
@@ -36,6 +37,7 @@ $ ->
       $('#panel button').removeAttr('disabled')
       $('#next').attr('disabled', 'disabled') if fid == gif.frameCount - 1
       $('#prev').attr('disabled', 'disabled') if fid == 0
+      $('#frame-ticker').text((gif.current + 1) + '/' + gif.frameCount)
 
     next: -> @selectFrame(@current + 1)
     previous: -> @selectFrame(@current - 1)
@@ -43,12 +45,12 @@ $ ->
     animate: =>
       return unless gif.animating
       gif.next()
-      gif.animateId = setTimeout(gif.animate, gif.frames[gif.current].delay)
+      gif.animateId = setTimeout(gif.animate, gif.frames[gif.current].delay / gif.speed)
 
     animateToggle: ->
       @animating = !@animating
       if @animating
-        @animateId = setTimeout(@animate, gif.frames[@current].delay)
+        @animateId = setTimeout(@animate, gif.frames[@current].delay / gif.speed)
       else
         clearTimeout(@animateId)
       but = $('#toggle')
@@ -135,6 +137,7 @@ $ ->
               $(window).resize()
               gif.selectFrame()
               $('#controls').mouseleave()
+              $('#options').mouseleave()
               gif.animateToggle()
         null
       )
@@ -166,9 +169,19 @@ $ ->
   $('#controls').hover(
     (evt) ->
       $('#frame-selector').transition({ bottom: $('#panel').outerHeight(), queue: false })
+      $('#controls').transition({ opacity: 1, queue: false })
     ,
     (evt) ->
       $('#frame-selector').transition({ bottom: -$('#frame-selector').outerHeight(), queue: false })
+      $('#controls').transition({ opacity: 0.2, queue: false })
+  )
+
+  $('#options').hover(
+    (evt) ->
+      $('#options').transition({ opacity: 1, top: 0, queue: false })
+    ,
+    (evt) ->
+      $('#options').transition({ opacity: 0.2, top: -($('#options').outerHeight() - $('#frame-ticker').outerHeight()), queue: false})
   )
 
   $(window).resize((evt) ->
@@ -178,7 +191,7 @@ $ ->
     ih = gif.height
     tw = iw
     th = ih
-    ratio = iw/ih # height * ratio = w
+    ratio = iw/ih
 
     if height * ratio <= width
       th = height
@@ -192,3 +205,5 @@ $ ->
     gif.selectFrame(gif.current, true)
     $('#preview-area').css({margin: "#{-ch/2}px 0 0 #{-cw/2}px"})
   )
+
+  $('#speed').change(-> gif.speed = Number($(this).val());$(this).siblings('.value').text("#{gif.speed.toFixed(1)}x"))

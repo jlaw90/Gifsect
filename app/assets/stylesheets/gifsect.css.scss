@@ -18,6 +18,10 @@ html, body {
   -ms-overflow-y: hidden;
 }
 
+* {
+  font-size: 100%;
+}
+
 #loading-overlay {
   position: fixed;
   bottom: 0;
@@ -39,71 +43,109 @@ html, body {
   }
 }
 
-#controls {
-  #panel, #frame-selector {
-    position: fixed;
-    bottom: 0;
-    left: 2%;
-    right: 2%;
-    text-align: center;
-    background-color: rgba(0, 0, 0, 0.5);
-  }
+#options, #panel, #frame-selector {
+  position: fixed;
+  left: 2%;
+  right: 2%;
+  text-align: center;
+  background-color: rgba(0, 0, 0, 0.5);
+}
 
-  #panel {
-    position: absolute;
-    bottom: 0;
-    display: inline;
-  }
+#panel, #frame-selector {
+  bottom: 0;
+}
 
-  #frame-selector {
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    bottom: 0px;
-    position: absolute;
-    padding: 0.25em;
-    padding-bottom: 0;
-    white-space: nowrap;
-    overflow: auto;
-    overflow-y: hidden;
-    -ms-overflow-y: hidden;
-    overflow-x: scroll;
+#options {
+  top: 0;
 
-    a.frame {
-      position: relative;
-      background-color: rgba(255, 255, 255, 0.1);
-      background-image: image-url('loader.gif');
-      background-repeat: no-repeat;
-      background-attachment: center;
-      background-position: center;
-      background-size: contain;
+  .option {
+    position: relative;
+    height: 1.5em;
+    text-shadow: 0 0 3px #000000;
+    color: #ffffff;
+
+    input {
+      margin: 0;
+      padding: 0;
+      height: 1.5em;
+      line-height: 1.5em;
+      margin-left: 7em;
+    }
+
+    label, .value {
+      position: absolute;
+      top: 0;
       display: inline-block;
-      margin-right: 0.25em;
-      border: 1px solid #eeeeee;
-      height: $frame-height;
-      width: $frame-height;
-      color: #ffffff;
-      text-decoration: none;
-      text-shadow: 0 0 2px #000000;
+      line-height: 1.5em;
+      height: 1.5em;
+    }
 
-      div {
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        right: 0
-      }
+    label {
+      width: 6em;
+      text-align: right;
+    }
 
-      &:focus, &:hover {
-        outline: none;
-        background-color: rgba(255, 255, 255, 0.2);
-      }
+    .value {
+      margin-left: 1em;
+    }
+  }
+}
 
-      &:last-child {
-        margin-right: 0;
-      }
 
-      &.selected {
-        background-color: rgba(255, 255, 255, 0.7);
-        border-color: #ffffff;
-      }
+#panel {
+  position: absolute;
+  bottom: 0;
+  display: inline;
+}
+
+#frame-selector {
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  bottom: 0px;
+  position: absolute;
+  padding: 0.25em;
+  padding-bottom: 0;
+  white-space: nowrap;
+  overflow: auto;
+  overflow-y: hidden;
+  -ms-overflow-y: hidden;
+  overflow-x: scroll;
+
+  a.frame {
+    position: relative;
+    background-color: rgba(255, 255, 255, 0.1);
+    background-image: image-url('loader.gif');
+    background-repeat: no-repeat;
+    background-attachment: center;
+    background-position: center;
+    background-size: contain;
+    display: inline-block;
+    margin-right: 0.25em;
+    border: 1px solid #eeeeee;
+    height: $frame-height;
+    width: $frame-height;
+    color: #ffffff;
+    text-decoration: none;
+    text-shadow: 0 0 3px #000000;
+
+    div {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0
+    }
+
+    &:focus, &:hover {
+      outline: none;
+      background-color: rgba(255, 255, 255, 0.2);
+    }
+
+    &:last-child {
+      margin-right: 0;
+    }
+
+    &.selected {
+      background-color: rgba(255, 255, 255, 0.7);
+      border-color: #ffffff;
     }
   }
 }
