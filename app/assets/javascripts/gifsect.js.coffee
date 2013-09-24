@@ -13,12 +13,13 @@ $ ->
     reconstructed: [],
     frameCount: 0,
     animating: false,
+    reversed: false,
     lastWidth: 0,
     lastHeight: 0,
     speed: 1
 
-    selectFrame: (fid=@current,resize=false)->
-      fid = 0 if fid < 0
+    selectFrame: (fid=@current)->
+      fid = @frameCount - 1 if fid < 0
       fid = gif.loopStart if fid >= @frameCount
       change = @current != fid || @context.canvas.width != @lastWidth || @context.canvas.height != @lastHeight
       return unless change
@@ -44,7 +45,7 @@ $ ->
 
     animate: =>
       return unless gif.animating
-      gif.next()
+      if gif.reversed then gif.previous() else gif.next()
       gif.animateId = setTimeout(gif.animate, gif.frames[gif.current].delay / gif.speed)
 
     animateToggle: ->
@@ -202,8 +203,10 @@ $ ->
 
     cw = gif.context.canvas.width = tw;
     ch = gif.context.canvas.height = th;
-    gif.selectFrame(gif.current, true)
+    gif.selectFrame(gif.current)
     $('#preview-area').css({margin: "#{-ch/2}px 0 0 #{-cw/2}px"})
   )
 
   $('#speed').change(-> gif.speed = Number($(this).val());$(this).siblings('.value').text("#{gif.speed.toFixed(1)}x"))
+
+  $('#reverse').change(-> gif.reversed = $(this).prop('checked'))
