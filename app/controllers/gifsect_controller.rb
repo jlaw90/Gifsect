@@ -12,9 +12,9 @@ class GifsectController < ApplicationController
   end
 
   def metadata
-    render json: { status: :ok, path: remote_hash_path('gif_data', retrieve_file(sanitise_url(request.fullpath[10..-1]))) }
+    render json: {status: :ok, path: remote_hash_path('gif_data', retrieve_file(sanitise_url(request.fullpath[10..-1])))}
   rescue Exception => e
-    render json: { status: :failed, message: e.message }
+    render json: {status: :failed, message: e.message}
   end
 
   private
@@ -51,37 +51,42 @@ class GifsectController < ApplicationController
   def process_gif(hash)
     data_path = hash_path('gif_data', hash)
     source = File.join(data_path, 'source.gif')
-    images = Image.read(source)
-    raise 'GIF image has no frames' unless images.length > 0
-    first = images[0]
-    ticks = (first.ticks_per_second || 100).to_f
-    bg = (first.background_color.is_a?(String)? Pixel.from_color(first.background_color): first.background_color)
-    bg = '#' + [bg.red, bg.green, bg.blue].map{|p| '%02X' % ((p >> QuantumDepth - 8) & 0xff)}.join('')
-    metadata = {
-        background: bg,
-        width: first.page.width,
-        height: first.page.height,
-        animStart: 0,
-        frames: [],
-        delay: first.delay.nil?? (1000.0/ticks).to_i: first.delay.to_f / (ticks * 1000).to_i
-    }
+    begin
+      images = Image.read(source)
+      raise 'Not an animation' unless images.length > 1
+      first = images[0]
+      ticks = (first.ticks_per_second || 100).to_f
+      bg = (first.background_color.is_a?(String) ? Pixel.from_color(first.background_color) : first.background_color)
+      bg = '#' + [bg.red, bg.green, bg.blue].map { |p| '%02X' % ((p >> QuantumDepth - 8) & 0xff) }.join('')
+      metadata = {
+          background: bg,
+          width: first.page.width,
+          height: first.page.height,
+          animStart: 0,
+          frames: [],
+          delay: first.delay.nil? ? (1000.0/ticks).to_i : first.delay.to_f / (ticks * 1000).to_i
+      }
 
 
-    #rec = Image.new(first.columns, first.rows)
-    images.each_with_index do |image, index|
-      ticks = (image.ticks_per_second || 100).to_f
-      md = {}
-      del = image.delay.nil?? metadata[:delay]: ((image.delay.to_f / ticks) * 1000).to_i
-      md[:delay] = del unless del == metadata[:delay]
-      metadata[:anim_start] = index if image.start_loop
-      metadata[:frames] << md
-      image.write(File.join(data_path, "#{index}.png"))
-      md[:x] = image.page.x unless image.page.x == 0
-      md[:y] = image.page.y unless image.page.y == 0
-      #rec.composite!(image, image.page.x, image.page.y, SrcOverCompositeOp)
-      #rec.write(File.join(data_path, "#{index}.png"))
+      #rec = Image.new(first.columns, first.rows)
+      images.each_with_index do |image, index|
+        ticks = (image.ticks_per_second || 100).to_f
+        md = {}
+        del = image.delay.nil? ? metadata[:delay] : ((image.delay.to_f / ticks) * 1000).to_i
+        md[:delay] = del unless del == metadata[:delay]
+        metadata[:anim_start] = index if image.start_loop
+        metadata[:frames] << md
+        image.write(File.join(data_path, "#{index}.png"))
+        md[:x] = image.page.x unless image.page.x == 0
+        md[:y] = image.page.y unless image.page.y == 0
+        #rec.composite!(image, image.page.x, image.page.y, SrcOverCompositeOp)
+        #rec.write(File.join(data_path, "#{index}.png"))
+      end
+      File.open(File.join(data_path, 'metadata.json'), 'w') { |file| file.write(JSON.generate(metadata)) }
+    rescue Exception => e
+      FileUtils.rm_rf(data_path)
+      raise e
     end
-    File.open(File.join(data_path, 'metadata.json'), 'w') { |file| file.write(JSON.generate(metadata)) }
     nil
   end
 
