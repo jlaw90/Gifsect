@@ -16,7 +16,7 @@ $ ->
     lastWidth: 0,
     lastHeight: 0
 
-    selectFrame: (fid = @current, resize = false)->
+    selectFrame: (fid=@current,resize=false)->
       fid = 0 if fid < 0
       fid = gif.loopStart if fid >= @frameCount
       change = @current != fid || @context.canvas.width != @lastWidth || @context.canvas.height != @lastHeight
@@ -37,10 +37,8 @@ $ ->
       $('#next').attr('disabled', 'disabled') if fid == gif.frameCount - 1
       $('#prev').attr('disabled', 'disabled') if fid == 0
 
-    next: ->
-      @selectFrame(@current + 1)
-    previous: ->
-      @selectFrame(@current - 1)
+    next: -> @selectFrame(@current + 1)
+    previous: -> @selectFrame(@current - 1)
 
     animate: =>
       return unless gif.animating
@@ -68,7 +66,7 @@ $ ->
     ).done((data, textStatus, jqXHR) ->
       unless data.status == 'ok'
         showError(data.message)
-      return
+        return
 
       gif.dataPath = '/' + data.path + '/'
 
@@ -118,12 +116,12 @@ $ ->
               canvas = document.getElementById('preview-area')
               unless canvas.getContext?
                 showError('Your browser does not support HTML canvas')
-              return
+                return
 
               ctx = gif.context = canvas.getContext('2d')
               ctx.canvas.width = gif.width;
               ctx.canvas.height = gif.height;
-              $(canvas).css({margin: "#{-gif.height / 2}px 0 0 #{-gif.width / 2}px"})
+              $(canvas).css({margin: "#{-gif.height/2}px 0 0 #{-gif.width/2}px"})
 
               for frame in gif.frames
                 ctx.drawImage(frame.source, frame.x, frame.y)
@@ -146,7 +144,7 @@ $ ->
     updateEllipsis(0)
     $('#loading-text').text(text)
 
-  window.updateEllipsis = (count = ((window.ellipsisCount || 0) + 1) % 3) ->
+  window.updateEllipsis = (count = ((window.ellipsisCount || 0)+1)%3) ->
     window.ellipsisCount = count
     str = Array(count + 2).join('.')
     $('#loading-ellipsis').html(str)
@@ -168,9 +166,9 @@ $ ->
   $('#controls').hover(
     (evt) ->
       $('#frame-selector').transition({ bottom: $('#panel').outerHeight(), queue: false })
-  ,
-  (evt) ->
-    $('#frame-selector').transition({ bottom: -$('#frame-selector').outerHeight(), queue: false })
+    ,
+    (evt) ->
+      $('#frame-selector').transition({ bottom: -$('#frame-selector').outerHeight(), queue: false })
   )
 
   $(window).resize((evt) ->
@@ -180,8 +178,7 @@ $ ->
     ih = gif.height
     tw = iw
     th = ih
-    ratio = iw / ih
-    # height * ratio = w
+    ratio = iw/ih # height * ratio = w
 
     if height * ratio <= width
       th = height
@@ -193,5 +190,5 @@ $ ->
     cw = gif.context.canvas.width = tw;
     ch = gif.context.canvas.height = th;
     gif.selectFrame(gif.current, true)
-    $('#preview-area').css({margin: "#{-ch / 2}px 0 0 #{-cw / 2}px"})
+    $('#preview-area').css({margin: "#{-ch/2}px 0 0 #{-cw/2}px"})
   )
