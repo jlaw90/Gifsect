@@ -35,6 +35,7 @@ html, body {
     top: 50%;
     bottom: 50%;
     width: 100%;
+    text-shadow: 0 0 3px #ffffff;
   }
 }
 
@@ -81,6 +82,7 @@ html, body {
       width: $frame-height;
       color: #ffffff;
       text-decoration: none;
+      text-shadow: 0 0 2px #000000;
 
       div {
         position: absolute;
