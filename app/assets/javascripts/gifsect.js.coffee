@@ -31,7 +31,6 @@ $ ->
       scroller = $('#frame-selector')
       mid = (scroller.innerWidth() - fw) / 2
       scroller.scrollLeft(Math.max(0, pos - mid))
-      window.location.hash = frame.attr('href');
       @context.drawImage(@reconstructed[fid], 0, 0, @context.canvas.width, @context.canvas.height)
       $('#panel button').removeAttr('disabled')
       $('#next').attr('disabled', 'disabled') if fid == gif.frameCount - 1
