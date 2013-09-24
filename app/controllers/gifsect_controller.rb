@@ -1,7 +1,7 @@
 require 'net/http'
 require 'digest/md5'
 require 'fileutils'
-require 'rmagick'
+require 'RMagick'
 require 'json'
 include Magick
 
