@@ -67,6 +67,7 @@ html, body {
     overflow-x: scroll;
 
     a.frame {
+      position: relative;
       background-color: rgba(255, 255, 255, 0.1);
       background-image: image-url('loader.gif');
       background-repeat: no-repeat;
@@ -80,6 +81,13 @@ html, body {
       width: $frame-height;
       color: #ffffff;
       text-decoration: none;
+
+      div {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0
+      }
 
       &:focus, &:hover {
         outline: none;
